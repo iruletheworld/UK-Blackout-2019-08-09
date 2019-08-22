@@ -11,7 +11,7 @@ __date__    = '2019.08.22'
 
 import os, csv, itertools
 import pandas as pd
-import gsyMain3
+import myMain
 
 # temp hardcode
 str_path_data_in  = os.path.join(os.getcwd(), '_data', 'RollingSystemFrequency_20190819_1757.csv')
@@ -49,6 +49,6 @@ df.index = df.index.tz_localize('GMT').tz_convert('Europe/London')
 df.to_csv(str_path_out, index=True, float_format='%.3f', index_label='Time', header=['Frequency'])
 
 # delete the temp data
-gsyMain3.deleteFile(str_path_temp)
+myMain.deleteFile(str_path_temp)
 
 print('Done')
