@@ -173,6 +173,7 @@ int_size_an_font = 10
 # annotation
 for i in range(0, len(list_event_info)):
 
+    # text and arrow
     an = ax.annotate(
                         list_event_info[i],
                         xy=list_event_coord[i],
@@ -184,6 +185,7 @@ for i in range(0, len(list_event_info)):
                         zorder=100
                     )
 
+    # dot on curve
     ax.scatter(list_event_coord[i][0], list_event_coord[i][1], s=60, facecolor='r', edgecolor='orange', lw=2, zorder=100)
 
 # set axes and legend
