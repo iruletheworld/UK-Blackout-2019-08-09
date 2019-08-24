@@ -3,6 +3,19 @@
 #- Python 3
 
 '''
+This project is to plot the events during the blackout in the UK on 2019-08-09.
+
+Data : Rolling System Frequency, Elexon (15 sec resolution)
+
+Upsampling : 15 sec to 0.1 sec
+
+Method : Cubic
+
+Upsampling is just to make the curve smooth and also makes easier to make annotations.
+
+See the "requirements.txt" for the Python dependencies.
+
+Ref : 
 https://www.programcreek.com/python/example/61483/matplotlib.dates.DateFormatter
 '''
 
@@ -13,11 +26,11 @@ __date__    = '2019.08.24'
 import os, csv, itertools
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import numpy as np
 import matplotlib.dates as dates
 import matplotlib.dates as mdates
 from dateutil import tz
-from matplotlib.font_manager import FontProperties
 
 # font property
 fp = FontProperties(fname=r'C:\windows\fonts\msyhbd.ttf')
@@ -54,6 +67,7 @@ int_barford_gt1b_lost    = 572380   # 16:53:58          ;13
 int_freq_recover         = 574350   # 16:57:15          ;14
 int_dno_reconnect        = 579660   # 17:06             ;15
 
+# event coordinates
 list_event_coord  = [
                         (mdates.date2num(df.index[int_lightning_detection]) , df['Frequency'][int_lightning_detection]),
                         (mdates.date2num(df.index[int_lightning_fault])     , df['Frequency'][int_lightning_fault]),
@@ -72,6 +86,7 @@ list_event_coord  = [
                         (mdates.date2num(df.index[int_freq_recover])        , df['Frequency'][int_freq_recover]),
                     ]
 
+# make event info strings
 list_event_time = [
                         '[16:52:33]',
                         '[16:52:33.490]',
@@ -112,6 +127,7 @@ list_event_info = [k + '\n' + v for k, v in zip(list_event_time, list_event_text
 
 list_event_info = [str(k+1).zfill(2) + '. ' + v for k, v in enumerate(list_event_info)]
 
+# annotation xytext value
 list_event_xytext = [
                         (60  , 90),       # Lightning strikes at Eaton Socon - Wymondley circuit
                         (-180, -10),      # Lightning fault at Eaton Socon - Wymondley circuit
@@ -130,23 +146,31 @@ list_event_xytext = [
                         (20  , -70),      # Normal frequency restored
                     ]
 
+# make fig
 fig = plt.figure(figsize=[fig_length, fig_height], dpi=int_dpi)
 
+# get fig axes
 ax = plt.gca()
 
+# plot the freq
 df.plot(ax=ax, color='red', lw=3, zorder=10)
 
+# normal freq
 ax.axhline(50.0, lw=3, color='k', zorder=4)
+
+# normal freq upper limit
 ax.axhline(50.5, lw=3, color='b', clip_on=False, zorder=5)
+
+# normal freq lower limit
 ax.axhline(49.5, lw=3, color='b', zorder=6)
 
-
+# annotation background bbox
 bkcolor = dict(facecolor='w', edgecolor='none', pad=0.01)
 
+# annotation font size
 int_size_an_font = 10
 
-print('annotating...')
-
+# annotation
 for i in range(0, len(list_event_info)):
 
     an = ax.annotate(
@@ -162,6 +186,7 @@ for i in range(0, len(list_event_info)):
 
     ax.scatter(list_event_coord[i][0], list_event_coord[i][1], s=60, facecolor='r', edgecolor='orange', lw=2, zorder=100)
 
+# set axes and legend
 dict_font_title = {
                         'fontsize' : 20,
                         'fontweight' : 'bold',
@@ -194,10 +219,12 @@ ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M:%S', tz=tz.gettz('Europe
 # grid line
 plt.grid(True, ls='--')
 
+# point for signature
 int_sign = 574220
 
 coord_sign = (mdates.date2num(df.index[int_sign]) , 48.9)
 
+# signature
 str_sign = (
                 u'DAR : Delayed Auto Reclose'
                 + '\n' + u'LFDD : Low Frequency Demand Disconnection'
@@ -208,8 +235,10 @@ str_sign = (
                 + '\n' + u'© 高斯羽 博士 (Dr. Gāo, Sīyǔ)'
             )
 
+# sign bbox setting
 bksign = dict(facecolor='w', edgecolor='r', boxstyle='round,pad=1')
 
+# sign
 ax.annotate(
                 str_sign,
                 fontproperties=fp,
@@ -222,11 +251,13 @@ ax.annotate(
 
 plt.tight_layout()
 
+# max fig 
 fig_manager = plt.get_current_fig_manager()
 fig_manager.window.showMaximized()
 
+# save the fig
 plt.savefig('uk_blackout_2019_08_09.png', dpi=300)
 
 # show fig
-# plt.show()
+plt.show()
 
