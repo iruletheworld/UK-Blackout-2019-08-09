@@ -1,3 +1,4 @@
 _data/RollingSystemFrequency_20190809_tz_converted.csv
 _data/RollingSystemFrequency_20190809_upsampled.csv
 *.db
+.vscode/
