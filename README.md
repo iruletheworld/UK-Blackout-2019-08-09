@@ -11,6 +11,10 @@ This project uses public available frequency data and NG's report to produce an 
 
 See the "requirements.txt" for the Python dependencies.
 
+The data used in this project are of 15 sec resolution, therefore it is necessary to perform upsampling to make the curve smoother and easier to annotate.
+
+NG usually release the hirstorical frequency data (1 sec resolution) in a 4-moth window. Thus, the frequency data of August should be available in December. At that time, the plot could be updated using the better data.
+
 ## License
 
 MIT
