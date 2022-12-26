@@ -39,5 +39,5 @@ pylint==2.3.1
   - isort [required: >=4.2.5,<5, installed: 4.3.21]
   - mccabe [required: >=0.6,<0.7, installed: 0.6.1]
 tornado==6.0.3
-wheel==0.33.4
+wheel==0.38.1
 wincertstore==0.2
